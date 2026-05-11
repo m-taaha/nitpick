@@ -1,0 +1,80 @@
+{
+  "name": "@octokit/app",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "type": "module",
+  "version": "0.0.0-development",
+  "description": "GitHub Apps toolset for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.mjs && tsc -p tsconfig.json",
+    "lint": "prettier --check {src,test}/* *.md package.json",
+    "lint:fix": "prettier --write {src,test}/* *.md package.json",
+    "pretest": "npm run -s lint",
+    "test": "vitest run --coverage",
+    "test:typescript": "npx tsc --allowImportingTsExtensions --noEmit --declaration --noUnusedLocals --esModuleInterop --strict --target es2022 --moduleResolution node16 --module node16 --exactOptionalPropertyTypes test/typescript-validate.ts"
+  },
+  "repository": "github:octokit/app.js",
+  "author": "Gregor Martynus (https://github.com/gr2m)",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/auth-app": "^8.1.2",
+    "@octokit/auth-unauthenticated": "^7.0.3",
+    "@octokit/core": "^7.0.6",
+    "@octokit/oauth-app": "^8.0.3",
+    "@octokit/plugin-paginate-rest": "^14.0.0",
+    "@octokit/types": "^16.0.0",
+    "@octokit/webhooks": "^14.0.0"
+  },
+  "devDependencies": {
+    "@octokit/tsconfig": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.0.0",
+    "esbuild": "^0.25.0",
+    "express": "^4.17.1",
+    "fetch-mock": "^12.0.0",
+    "mockdate": "^3.0.2",
+    "prettier": "3.7.4",
+    "semantic-release-plugin-update-version-in-files": "^2.0.0",
+    "tinyglobby": "^0.2.13",
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">= 20"
+  },
+  "release": {
+    "branches": [
+      "+([0-9]).x",
+      "main",
+      "next",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "./pkg"
+        }
+      ],
+      [
+        "semantic-release-plugin-update-version-in-files",
+        {
+          "files": [
+            "pkg/dist-web/*",
+            "pkg/dist-node/*",
+            "pkg/*/version.*"
+          ]
+        }
+      ]
+    ]
+  }
+}
